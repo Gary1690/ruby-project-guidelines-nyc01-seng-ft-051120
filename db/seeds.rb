@@ -18,3 +18,6 @@ Watchlist.create(user:john,show:fwd)
 actor = Actor.create(name:"Jason Bateman")
 
 Starring.create(actor:actor,show:ozark)
+
+
+review1 = Review.create(comment:"Good show",rating:5, user: john, show: ozark)
