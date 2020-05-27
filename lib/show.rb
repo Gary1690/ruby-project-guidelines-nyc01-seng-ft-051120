@@ -10,7 +10,8 @@ class Show < ActiveRecord::Base
         rating_sum = self.reviews.reduce(0) do |sum, review|
             sum + review.rating
         end
-        rating_sum / self.reviews.count.to_f
+        rating_average = rating_sum / self.reviews.count.to_f
+        rating_average.nan? ? 0 : rating_average
     end
 
     def self.genres

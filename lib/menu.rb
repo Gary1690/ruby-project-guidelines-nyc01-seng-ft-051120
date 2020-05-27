@@ -71,11 +71,15 @@ class Menu
         end
     end
 
-    def explore_shows
-        Show.all.map do |show|
+    def display_shows(shows)
+        shows.map do |show|
             puts "#{show.title} #{show.rating}"
             puts " "
         end
+    end
+
+    def explore_shows
+        display_shows(Show.all)
     end
 
     def explore_genre
@@ -85,25 +89,18 @@ class Menu
         print "Select Genre: "
         genre = gets.chomp
 
-        Show.where(genre: genre).map do |show|
-            puts "#{show.title} #{show.rating}"
-            puts " "
-        end
+        display_shows(Show.where(genre: genre))
     end
 
     def explore_actor
         print "Select Actor: "
         actor = gets.chomp
 
-        Actor.find_by(name: actor).shows.map do |show|
-            puts "#{show.title} #{show.rating}"
-            puts " "
-        end
-
+        display_shows(Actor.find_by(name: actor).shows)
     end
 
     def explore_rating
-
+        display_shows(Show.all.sort_by{|x| x.rating}.reverse)
     end
 
     def add_watchlist
@@ -120,10 +117,7 @@ class Menu
     end
 
     def remove_watchlist
-        @@current_user.shows.map do |show|
-            puts "#{show.title}"
-            puts " "
-        end
+        display_shows(@@current_user.shows)
 
         print "Remove Show from Watchlist: "
         add_show = gets.chomp
@@ -157,10 +151,7 @@ class Menu
     end
 
     def play
-        @@current_user.shows.map do |show|
-            puts "#{show.title}"
-            puts " "
-        end
+        display_shows(@@current_user.shows)
 
         print "Play Show from Watchlist: "
         title = gets.chomp
