@@ -1,5 +1,12 @@
 class Menu
 
+    attr_accessor :continue
+
+    def initialize
+        @continue = true
+    end
+
+
     def greeting
         puts "Welcome to Flixnet"
         print "User name: "
@@ -31,8 +38,14 @@ class Menu
     end
 
     def main_menu
+       while self.continue do
         display_menu
         option = gets.chomp.to_i
+        options(option)
+       end
+    end
+
+    def options(option)
         case option 
         when 1 
             explore_shows
@@ -52,7 +65,7 @@ class Menu
             play
         when 9
             exit
-            # break
+            self.continue= false
         else
             puts "That's not an Option"
         end
@@ -66,10 +79,26 @@ class Menu
     end
 
     def explore_genre
+        Show.genres.map do |genres|
+            puts genres
+        end
+        print "Select Genre: "
+        genre = gets.chomp
 
+        Show.where(genre: genre).map do |show|
+            puts "#{show.title} #{show.rating}"
+            puts " "
+        end
     end
 
     def explore_actor
+        print "Select Actor: "
+        actor = gets.chomp
+
+        Actor.find_by(name: actor).shows.map do |show|
+            puts "#{show.title} #{show.rating}"
+            puts " "
+        end
 
     end
 
@@ -78,23 +107,74 @@ class Menu
     end
 
     def add_watchlist
+        print "Add Show to Watchlist: "
+        add_show = gets.chomp
 
+        show = Show.find_by(title: add_show)
+        if show 
+            Watchlist.create(show: show, user: @@current_user)
+            print "Show Added!"
+        else
+            print "Show Not Found"
+        end
     end
 
     def remove_watchlist
+        @@current_user.shows.map do |show|
+            puts "#{show.title}"
+            puts " "
+        end
 
+        print "Remove Show from Watchlist: "
+        add_show = gets.chomp
+
+        show = Show.find_by(title: add_show)
+        if show 
+            watchlist = Watchlist.find_by(show: show, user: @@current_user)
+            Watchlist.delete(watchlist)
+            print "Show Removed!"
+        else
+            print "Show Not Found"
+        end
     end
 
     def write_review
+        print "Show: "
+        title = gets.chomp
+
+        show = Show.find_by(title: title)
+            if show
+                puts "Comment: "
+                comment = gets.chomp
+                puts "Rating (1 to 5): "
+                rating = gets.chomp.to_i
+                Review.create(comment: comment, rating: rating, show: show, user: @@current_user)
+                puts "Review Created"
+            else
+                puts "Show Not Found"
+            end
 
     end
 
     def play
+        @@current_user.shows.map do |show|
+            puts "#{show.title}"
+            puts " "
+        end
 
+        print "Play Show from Watchlist: "
+        title = gets.chomp
+
+        show = Show.find_by(title: title)
+        if show && @@current_user.shows.include?(show)
+            puts "Now Playing, #{show.title}"
+        else
+            puts "#{show.title} Not Found in Watchlist"
+        end
     end
 
     def exit
-
+        puts "Goodbye"
     end
 
 

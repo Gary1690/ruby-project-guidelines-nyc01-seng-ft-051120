@@ -12,4 +12,10 @@ class Show < ActiveRecord::Base
         end
         rating_sum / self.reviews.count.to_f
     end
+
+    def self.genres
+        self.all.map do |show|
+            show.genre
+        end
+    end
 end
