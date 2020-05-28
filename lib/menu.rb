@@ -157,22 +157,26 @@ class Menu
     end
 
     def add_watchlist
+        display_watchlist
         print "Add Show to Watchlist: "
         add_show = gets.chomp
 
         show = Show.find_by(title: add_show)
         if show 
             Watchlist.create(show: show, user: @@current_user)
-            print "Show Added!"
+            puts "Show Added!"
         else
-            print "Show Not Found"
+            puts "Show Not Found"
         end
     end
 
-    def remove_watchlist
+    def display_watchlist
         puts "Shows in your Watchlist".center(60)
         display_shows(@@current_user.shows)
+    end
 
+    def remove_watchlist
+        display_watchlist
         print "Remove Show from Watchlist: "
         add_show = gets.chomp
 
@@ -180,9 +184,9 @@ class Menu
         if show 
             watchlist = Watchlist.find_by(show: show, user: @@current_user)
             Watchlist.delete(watchlist)
-            print "Show Removed!"
+            puts "Show Removed!"
         else
-            print "Show Not Found"
+            puts "Show Not Found"
         end
     end
 
