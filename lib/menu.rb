@@ -1,6 +1,7 @@
 class Menu
 
     attr_accessor :continue
+    @@current_user = nil
 
     def initialize
         @continue = true
@@ -15,6 +16,7 @@ class Menu
         pass = gets.chomp
         user = User.find_by(email: user_name, password: pass)
         if user
+            system("clear")
             puts "Welcome #{user.first_name}!"
             @@current_user = user
             main_menu
@@ -23,7 +25,6 @@ class Menu
         end
     end
 
-    @@current_user = nil
 
     def display_menu
         puts "1. Explore all Shows"
@@ -42,6 +43,7 @@ class Menu
         display_menu
         option = gets.chomp.to_i
         options(option)
+        system("clear")
        end
     end
 
