@@ -29,19 +29,24 @@ class Menu
     end
 
     def sign_in
-        puts "Sign in".center(20)
-        print "User name: "
-        user_name = gets.chomp
-        print "Password: "
-        pass = gets.chomp
-        user = User.find_by(email: user_name, password: pass)
-        if user
-            system("clear")
-            puts "Welcome #{user.first_name}!"
-            @@current_user = user
-            main_menu
-        else
-            puts "Incorrect Login."
+        attempts = 0
+        while attempts < 3 do  
+            puts "Sign in".center(20)
+            print "User name: "
+            user_name = gets.chomp
+            print "Password: "
+            pass = gets.chomp
+            user = User.find_by(email: user_name, password: pass)
+            if user
+                system("clear")
+                puts "Welcome #{user.first_name}!"
+                @@current_user = user
+                main_menu
+                break
+            else
+                attempts+=1
+                puts "Incorrect Login. Attempts(#{attempts}/3)"
+            end
         end
     end
 
@@ -78,6 +83,7 @@ class Menu
     def main_menu
        while self.continue do 
             display_menu
+            print "Enter Option Number (1-9): "
             option = gets.chomp.to_i
             options(option)
             if @continue

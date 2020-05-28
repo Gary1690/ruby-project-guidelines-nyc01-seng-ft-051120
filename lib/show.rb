@@ -11,7 +11,7 @@ class Show < ActiveRecord::Base
             sum + review.rating
         end
         rating_average = rating_sum / self.reviews.count.to_f
-        rating_average.nan? ? 0 : rating_average
+        rating_average.nan? ? 0 : rating_average.ceil(2)
     end
 
     def self.genres
