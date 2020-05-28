@@ -164,6 +164,7 @@ class Menu
         show = Show.find_by(title: add_show)
         if show 
             Watchlist.create(show: show, user: @@current_user)
+            @@current_user.reload
             puts "Show Added!"
         else
             puts "Show Not Found"
@@ -184,6 +185,7 @@ class Menu
         if show 
             watchlist = Watchlist.find_by(show: show, user: @@current_user)
             Watchlist.delete(watchlist)
+            @@current_user.reload
             puts "Show Removed!"
         else
             puts "Show Not Found"
@@ -191,14 +193,16 @@ class Menu
     end
 
     def write_review
+        puts "Review".center(60)
+        puts "-" * 60
         print "Show: "
         title = gets.chomp
 
         show = Show.find_by(title: title)
             if show
-                puts "Comment: "
+                print "Comment: "
                 comment = gets.chomp
-                puts "Rating (1 to 5): "
+                print "Rating (1 to 5): "
                 rating = gets.chomp.to_i
                 Review.create(comment: comment, rating: rating, show: show, user: @@current_user)
                 puts "Review Created"
