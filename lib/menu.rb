@@ -32,7 +32,7 @@ class Menu
         attempts = 0
         while attempts < 3 do  
             puts "Sign in".center(20)
-            print "User name: "
+            print "Email: "
             user_name = gets.chomp
             print "Password: "
             pass = gets.chomp
@@ -236,9 +236,5 @@ class Menu
     def exit
         puts "Goodbye"
     end
-
-
-
-    
    
 end
