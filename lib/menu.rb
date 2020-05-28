@@ -9,7 +9,27 @@ class Menu
 
 
     def greeting
-        puts "Welcome to Flixnet"
+        option =""
+        while option != 'q' && option != 'Q'
+            puts "Welcome to Flixnet"
+            puts  "1. Sign in"
+            puts  "2. Sign up"
+            puts  "Press q or Q to quit"
+            option = gets.chomp
+            if option == '1'
+                system ("clear") 
+                sign_in
+                break
+            elsif option == '2'
+                system ("clear") 
+                sign_up
+                break
+            end
+        end
+    end
+
+    def sign_in
+        puts "Sign in".center(20)
         print "User name: "
         user_name = gets.chomp
         print "Password: "
@@ -23,6 +43,23 @@ class Menu
         else
             puts "Incorrect Login."
         end
+    end
+
+    def sign_up
+        puts "Sign up"
+        print "First Name: "
+        first_name = gets.strip
+        print "Last Name: "
+        last_name = gets.strip 
+        print "Email: "
+        email = gets.strip 
+        print "Password: "
+        pass = gets.strip
+        new_user = User.create(first_name:first_name,last_name:last_name,email:email,password:pass)
+        @@current_user = new_user
+        system("clear")
+        puts "Welcome #{new_user.first_name}!"
+        main_menu 
     end
 
 
@@ -39,12 +76,20 @@ class Menu
     end
 
     def main_menu
-       while self.continue do
-        display_menu
-        option = gets.chomp.to_i
-        options(option)
-        system("clear")
+       while self.continue do 
+            display_menu
+            option = gets.chomp.to_i
+            options(option)
+            if @continue
+                pause
+            end
        end
+    end
+
+    def pause 
+        print "press any key"                                                                                                    
+        STDIN.getch                                                                                                              
+        print "            \r"                                                                                                      
     end
 
     def options(option)
@@ -75,33 +120,39 @@ class Menu
 
     def display_shows(shows)
         shows.map do |show|
-            puts "#{show.title} #{show.rating}"
+            60.times{print"-"}
+            #puts "\n title: #{show.title} genre:#{show.genre} rating:#{show.rating}"
+            printf "\n%-30s %-20s %-10s\n",show.title,show.genre,show.rating
             puts " "
         end
     end
 
     def explore_shows
+        puts "Shows".center(60)
         display_shows(Show.all)
     end
 
     def explore_genre
+        puts "Genre Catalog".center(60)
+        puts "-" * 60
         Show.genres.map do |genres|
             puts genres
         end
         print "Select Genre: "
         genre = gets.chomp
-
+        puts "#{genre} Shows".center(60)
         display_shows(Show.where(genre: genre))
     end
 
     def explore_actor
         print "Select Actor: "
         actor = gets.chomp
-
+        puts "Shows starring #{actor}".center(60)
         display_shows(Actor.find_by(name: actor).shows)
     end
 
     def explore_rating
+        puts "Shows by rating".center(60)
         display_shows(Show.all.sort_by{|x| x.rating}.reverse)
     end
 
@@ -119,6 +170,7 @@ class Menu
     end
 
     def remove_watchlist
+        puts "Shows in your Watchlist".center(60)
         display_shows(@@current_user.shows)
 
         print "Remove Show from Watchlist: "
@@ -153,6 +205,7 @@ class Menu
     end
 
     def play
+        puts "Shows in your Watchlist".center(60)
         display_shows(@@current_user.shows)
 
         print "Play Show from Watchlist: "
