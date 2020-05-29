@@ -88,6 +88,8 @@ class Menu
             options(option)
             if @continue
                 pause
+                #binding.pry
+                #system 'clear'
             end
        end
     end
@@ -234,7 +236,7 @@ class Menu
     end
 
     def exit
-        puts "Goodbye"
+        puts "Goodbye, #{@@current_user.first_name}"
     end
    
 end
