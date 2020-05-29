@@ -17,6 +17,6 @@ class Show < ActiveRecord::Base
     def self.genres
         self.all.map do |show|
             show.genre
-        end
+        end.uniq
     end
 end
